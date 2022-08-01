@@ -1,4 +1,4 @@
-FROM nginx:1.21.6
+FROM nginx:1.22.0
 
 VOLUME [ "/code" ]
 
@@ -103,12 +103,15 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
     mkdir /projeto && \
     mkdir ~/.mutt/cache/bodies && \
     touch ~/.mutt/certificates && \
-    touch ~/.mutt/muttrc 
+    touch ~/.mutt/muttrc && \
+    mkdir ~/Mail && \
+    mkdir -m 0700 ~/Mail/INBOX && \
+    mkdir -m 0700 ~/Mail/INBOX/{cur,new,tmp}
     
 ADD config_cntr/php.ini /etc/php/8.1/fpm/php.ini
 ADD config_cntr/www.conf /etc/php/8.1/fpm/pool.d/www.conf
 ADD config_cntr/cron.list /
 ADD config_cntr/nginx.conf /etc/nginx
-ADD config_cntr/default.conf /etc/nginx/conf.d
+ADD config_cntr/conf.d/* /etc/nginx/conf.d/
 ADD config_cntr/muttrc.template /
 ADD config_cntr/drivers/* /usr/lib/php/20210902/

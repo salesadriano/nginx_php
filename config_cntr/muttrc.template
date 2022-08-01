@@ -1,5 +1,7 @@
 set from = "${MAIL_USER}@${MAIL_DOMAIN}"
 set realname = "${MAIL_NAME}"
+set ssl_force_tls = yes
+set ssl_starttls = yes
 set spoolfile = "+INBOX"
 set header_cache =~/.mutt/cache/headers
 set message_cachedir =~/.mutt/cache/bodies

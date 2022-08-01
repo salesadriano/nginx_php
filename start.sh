@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if ! [ -z ${GIT_USERNAME} ] && [ -z ${GIT_PASSWORD} ] && [ -z ${GIT_PATH} ]
+if ! [ -z ${GIT_USERNAME} ] && ! [ -z ${GIT_PASSWORD} ] && ! [ -z ${GIT_PATH} ]
 then
   cd /projeto
   git config --global pull.ff only && \
@@ -36,12 +36,17 @@ then
   service php8.0-fpm restart
 fi
 
-if [ -f /code/config_cntr/nginx.conf ] || [ -f /code/config_cntr/default.conf ]
+if [ -f /code/config_cntr/nginx.conf ] 
 then
-  cp /code/config_cntr/nginx.conf /etc/nginx/nginx.conf
-  cp /code/config_cntr/default.conf /etc/nginx/conf.d/default.conf
-  service nginx reload
+  cp /code/config_cntr/nginx.conf /etc/nginx/nginx.conf  
 fi
+
+if [ -d /code/config_cntr/conf.d ]
+then
+  cp /code/config_cntr/conf.d/* /etc/nginx/conf.d/
+fi
+
+service nginx reload
 
 if ! [ -z ${MAIL_SERVER} ]
 then
@@ -50,5 +55,5 @@ fi
 
 if ! [ -z ${WWWROOT} ]
 then
-  sed -i "s/\/code/${WWWROOT}/g" /etc/nginx/conf.d/default.conf
+  sed -i "s|/code;|${WWWROOT};|g" /etc/nginx/conf.d/default.conf
 fi
