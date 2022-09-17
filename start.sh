@@ -9,11 +9,11 @@ then
   git init && \
   git remote add master https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_PATH}
   git pull master master  
-  rsync -aruvhcpt --progress /projeto/* /code/
+  rsync -aruvhcpt --progress /projeto/* ${WWWROOT}/
 fi
 
-chown -R www-data:www-data /code &
-chmod -R 775 /code &
+chown -R www-data:www-data ${WWWROOT} &
+chmod -R 775 ${WWWROOT} &
 
 if [ -d /scripts_init ];
 then
@@ -22,28 +22,36 @@ then
   done
 fi
 
-if [ -d /code/scripts_init ];
+if [ -d /projeto/scripts_init ];
 then
-  for f in /code/scripts_init/*; 
+  for f in /projeto/scripts_init/*; 
     do $f; 
   done
 fi
 
-if [ -f /code/config_cntr/php.ini ] || [ -f /code/config_cntr/www.conf ]
+if [ -f /projeto/config_cntr/php.ini ] || [ -f /projeto/config_cntr/www.conf ]
 then
-  cp /code/config_cntr/php.ini /etc/php/8.0/fpm/php.ini
-  cp /code/config_cntr/www.conf /etc/php/8.0/fpm/pool.d/www.conf
-  service php8.0-fpm restart
+  cp /projeto/config_cntr/php.ini /etc/php/8.0/fpm/php.ini
+  cp /projeto/config_cntr/www.conf /etc/php/8.0/fpm/pool.d/www.conf    
 fi
 
-if [ -f /code/config_cntr/nginx.conf ] 
+if ! [ -z ${DEBUG} ]
 then
-  cp /code/config_cntr/nginx.conf /etc/nginx/nginx.conf  
+  apt update
+  apt -y install --allow-unauthenticated php-xdebug
+  sed -i "s|##||g" /etc/php/8.1/fpm/php.ini
 fi
+service php8.1-fpm reload
 
-if [ -d /code/config_cntr/conf.d ]
+if [ -f /projeto/config_cntr/nginx.conf ] 
 then
-  cp /code/config_cntr/conf.d/* /etc/nginx/conf.d/
+  cp /projeto/config_cntr/nginx.conf /etc/nginx/nginx.conf  
+fi
+sed -i "s|/code;|${WWWROOT};|g" /etc/nginx/conf.d/default.conf
+
+if [ -d /projeto/config_cntr/conf.d ]
+then
+  cp /projeto/config_cntr/conf.d/* /etc/nginx/conf.d/
 fi
 
 service nginx reload
@@ -53,7 +61,3 @@ then
   envsubst < /muttrc.template > ~/.mutt/muttrc
 fi
 
-if ! [ -z ${WWWROOT} ]
-then
-  sed -i "s|/code;|${WWWROOT};|g" /etc/nginx/conf.d/default.conf
-fi

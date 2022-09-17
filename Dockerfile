@@ -1,8 +1,9 @@
-FROM nginx:1.22.0
+FROM nginx:1.23.1
 
 VOLUME [ "/code" ]
 
 ENV ACCEPT_EULA=Y
+ENV WWWROOT=/code
 
 WORKDIR /code
 
@@ -67,7 +68,7 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
                    php8.1-ctype \
                    php8.1-opcache \                   
                    php8.1-phar \                   
-                   php8.1-readline \               
+                   php8.1-readline \          
                    unixodbc-dev \
                    msodbcsql18 \
                    mssql-tools \
@@ -112,6 +113,6 @@ ADD config_cntr/php.ini /etc/php/8.1/fpm/php.ini
 ADD config_cntr/www.conf /etc/php/8.1/fpm/pool.d/www.conf
 ADD config_cntr/cron.list /
 ADD config_cntr/nginx.conf /etc/nginx
-ADD config_cntr/conf.d/* /etc/nginx/conf.d/
+ADD config_cntr/default.conf /etc/nginx/conf.d/
 ADD config_cntr/muttrc.template /
 ADD config_cntr/drivers/* /usr/lib/php/20210902/
