@@ -21,6 +21,9 @@ Configurações para cliente de e-mail baseado em mutt
 ## Document Root
 
 ``${WWWROOT}`` - Caminho do diretório que será usado como Document Root pelo NGINX. 
+## diretório de Trabalho
+
+``${WORKDIR}`` - diretório principal do projeto. 
 
 ## Debug
 ``${DEBUG}`` - Quando definido com true habilita o x-debug no PHP. 

@@ -4,6 +4,7 @@ VOLUME [ "/code" ]
 
 ENV ACCEPT_EULA=Y
 ENV WWWROOT=/code
+ENV WORKDIR=/code
 
 WORKDIR /code
 

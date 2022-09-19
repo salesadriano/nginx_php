@@ -9,11 +9,11 @@ then
   git init && \
   git remote add master https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_PATH}
   git pull master master  
-  rsync -aruvhcpt --progress /projeto/* ${WWWROOT}/
+  rsync -aruvhcpt --progress /projeto/* ${WORKDIR}/
 fi
 
-chown -R www-data:www-data ${WWWROOT} &
-chmod -R 775 ${WWWROOT} &
+chown -R www-data:www-data ${WORKDIR} &
+chmod -R 775 ${WORKDIR} &
 
 if [ -d /scripts_init ];
 then
