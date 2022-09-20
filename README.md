@@ -29,7 +29,7 @@ Configurações para cliente de e-mail baseado em mutt
 ``${DEBUG}`` - Quando definido com true habilita o x-debug no PHP. 
 
 ## Paths
-``/projeto`` - Quando configurado o repositório do GIT o pull do projeto é feito neste path e em seguida é sincronizado com o ``${WWWROOT}``; \
+``/projeto`` - Quando configurado o repositório do GIT o pull do projeto é feito neste path e em seguida é sincronizado com o ``${WORKDIR}``; \
 ``/projeto/config_cntr/php.ini`` - Quando presente no projeto substitui o arquivo no Sistema Operacional (SO) e reinicia o serviço do PHP; \
 ``/projeto/config_cntr/www.conf`` - Quando presente no projeto substitui o arquivo no SO e reinicia o serviço do PHP; \
 ``/projeto/config_cntr/nginx.conf`` - Quando presente no projeto substitui o arquivo no SO e reinicia o serviço do NGINX; \
