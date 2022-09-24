@@ -12,10 +12,12 @@ then
   rsync -aruvhcpt --progress /projeto/* ${WORKDIR}/
 fi
 
-if [ PERMISSAO eq "true" ]
-  chown -R www-data:www-data ${WORKDIR} &
-  chmod -R 775 ${WORKDIR} &
+if [ ${PERMISSAO} == "true" ]
+then
+  chown -R www-data:www-data ${WORKDIR} 
 fi
+
+chmod -R 777 ${WORKDIR} 
 
 if [ -d /scripts_init ];
 then
@@ -24,10 +26,12 @@ then
   done
 fi
 
+chmod -R 755 /projeto/scripts_init
+
 if [ -d /projeto/scripts_init ];
 then
-  for f in /projeto/scripts_init/*; 
-    do $f; 
+  for f in /projeto/scripts_init/*;    
+    do echo $f; sh $f; 
   done
 fi
 
