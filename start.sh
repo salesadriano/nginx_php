@@ -26,24 +26,16 @@ then
   ln -s ${WWWROOT} /var/www/html
 fi
 
-
-if [ -d /scripts_init ];
-then
-  for f in /scripts_init/*; 
-    do $f; 
-  done
-fi
-
 if [ -f /projeto/config_cntr/php.ini ] || [ -f /projeto/config_cntr/www.conf ]
 then
   cp /projeto/config_cntr/php.ini /etc/php/8.1/fpm/php.ini
   cp /projeto/config_cntr/www.conf /etc/php/8.1/fpm/pool.d/www.conf    
 fi
 
-if ! [ -z ${DEBUG} ] && [ ${DEBUG}  == "true" ]
+if [ ${DEBUG}  == "true" ]
 then
   apt update
-  apt -y install --allow-unauthenticated php8.1-php-xdebug
+  apt -y install --allow-unauthenticated php8.1-xdebug
   sed -i "s|##||g" /etc/php/8.1/fpm/php.ini
 fi
 service php8.1-fpm reload
