@@ -6,6 +6,7 @@ variables:
 publish:
   stage: publish
   script:
+    - echo "127.0.0.1 docker" >> /etc/hosts
     - docker build -t $TAG_COMMIT -t $TAG_LATEST .    
     - docker login -u $CI_REGISTRY_USER -p CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $TAG_COMMIT
