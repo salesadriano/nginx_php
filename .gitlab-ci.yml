@@ -5,10 +5,6 @@ variables:
   TAG_LATEST: $CI_REGISTRY/$CI_REGISTRY_USER/teste:latest
   TAG_COMMIT: $CI_REGISTRY/$CI_REGISTRY_USER/teste:$CI_COMMIT_REF_SLUG
 publish:
-  image: docker:dind
-  stage: publish
-  services:
-    - docker:dind
   before_script:
     - docker build -t $TAG_COMMIT -t $TAG_LATEST .
   script:    
