@@ -1,20 +1,11 @@
 stages:
   - publish
-  - deploy
 variables:
   TAG_LATEST: $CI_REGISTRY/$CI_REGISTRY_USER/teste:latest
   TAG_COMMIT: $CI_REGISTRY/$CI_REGISTRY_USER/teste:$CI_COMMIT_REF_SLUG
 publish:
   stage: publish
-  before_script:
-    - docker build -t $TAG_COMMIT -t $TAG_LATEST .
-  script:    
+  script:
+    - docker build -t $TAG_COMMIT -t $TAG_LATEST .    
     - docker login -u $CI_REGISTRY_USER -p CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker push $TAG_COMMIT
-deploy:
-  image: alpine:latest
-  stage: deploy
-  tags:
-    - deployment
-  script:
-    - echo "CI_REGISTRY/$CI_REGISTRY_USER/teste:$CI_COMMIT_REF_SLUG"
