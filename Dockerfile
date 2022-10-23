@@ -40,39 +40,34 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
                    unzip && \
     locale-gen && \
     curl -o /etc/apt/trusted.gpg.d/php.gpg -fSL "https://packages.sury.org/php/apt.gpg" && \
-    curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
-    curl -s https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
     echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | tee /etc/apt/sources.list.d/php.list && \
     wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add - && \
     add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ && \
     apt -y update && \
     apt -y remove libgcc-8-dev && \
-    apt -y install --allow-unauthenticated php8.1 \
-                   php8.1-fpm \
-                   php8.1-mysql \
-                   php8.1-mbstring \
-                   php8.1-xmlrpc \
-                   php8.1-soap \
-                   php8.1-gd \
-                   php8.1-xml \
-                   php8.1-intl \
-                   php8.1-dev \
-                   php8.1-curl \
-                   php8.1-cli \
-                   php8.1-zip \
-                   php8.1-imagick \
-                   php8.1-pgsql \
-                   php8.1-gmp \
-                   php8.1-ldap \
-                   php8.1-bcmath \
-                   php8.1-bz2 \
-                   php8.1-ctype \
-                   php8.1-opcache \                   
-                   php8.1-phar \                   
-                   php8.1-readline \          
-                   unixodbc-dev \
-                   msodbcsql18 \
-                   mssql-tools \
+    apt -y install --allow-unauthenticated php5.6 \
+                   php5.6-fpm \
+                   php5.6-mysql \
+                   php5.6-mbstring \
+                   php5.6-xmlrpc \
+                   php5.6-soap \
+                   php5.6-gd \
+                   php5.6-xml \
+                   php5.6-intl \
+                   php5.6-dev \
+                   php5.6-curl \
+                   php5.6-cli \
+                   php5.6-zip \
+                   php5.6-imagick \
+                   php5.6-pgsql \
+                   php5.6-gmp \
+                   php5.6-ldap \
+                   php5.6-bcmath \
+                   php5.6-bz2 \
+                   php5.6-ctype \
+                   php5.6-opcache \                   
+                   php5.6-phar \                   
+                   php5.6-readline \
                    gcc \
                    g++ \
                    make \
@@ -82,9 +77,6 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
                    git \
                    adoptopenjdk-8-hotspot && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/8.1/mods-available/sqlsrv.ini && \
-    printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/8.1/mods-available/pdo_sqlsrv.ini && \
-    phpenmod -v 8.1 sqlsrv pdo_sqlsrv && \
     ntpd -q -g && \
     rm -rf /var/lib/apt/lists/* && \
     apt upgrade -y && \
@@ -93,7 +85,7 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
     chown -R www-data:www-data /code &&  \
     printf "# priority=10\nservice ntp start\n" > /docker-entrypoint.d/10-ntpd.sh && \
     chmod 755 /docker-entrypoint.d/10-ntpd.sh && \
-    printf "# priority=30\nservice php8.1-fpm start\n" > /docker-entrypoint.d/30-php-fpm.sh && \
+    printf "# priority=30\nservice php5.6-fpm start\n" > /docker-entrypoint.d/30-php-fpm.sh && \
     chmod 755 /docker-entrypoint.d/30-php-fpm.sh && \
     printf "# priority=40\nservice cron start\n" > /docker-entrypoint.d/40-cron.sh && \
     chmod 755 /docker-entrypoint.d/10-ntpd.sh && \    
@@ -109,10 +101,9 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
     mkdir -m 0700 ~/Mail/INBOX && \
     mkdir -m 0700 ~/Mail/INBOX/{cur,new,tmp}
     
-ADD config_cntr/php.ini /etc/php/8.1/fpm/php.ini
-ADD config_cntr/www.conf /etc/php/8.1/fpm/pool.d/www.conf
+ADD config_cntr/php.ini /etc/php/5.6/fpm/php.ini
+ADD config_cntr/www.conf /etc/php/5.6/fpm/pool.d/www.conf
 ADD config_cntr/cron.list /
 ADD config_cntr/nginx.conf /etc/nginx
 ADD config_cntr/default.conf /etc/nginx/conf.d/
 ADD config_cntr/muttrc.template /
-ADD config_cntr/drivers/* /usr/lib/php/20210902/

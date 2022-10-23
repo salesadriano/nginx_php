@@ -36,17 +36,17 @@ fi
 
 if [ -f /projeto/config_cntr/php.ini ] || [ -f /projeto/config_cntr/www.conf ]
 then
-  cp /projeto/config_cntr/php.ini /etc/php/8.1/fpm/php.ini
-  cp /projeto/config_cntr/www.conf /etc/php/8.1/fpm/pool.d/www.conf    
+  cp /projeto/config_cntr/php.ini /etc/php/5.6/fpm/php.ini
+  cp /projeto/config_cntr/www.conf /etc/php/5.6/fpm/pool.d/www.conf    
 fi
 
-if ! [ -z ${DEBUG} ] && [ ${DEBUG}  == "true" ]
+if [ ${DEBUG}  == "true" ]
 then
   apt update
-  apt -y install --allow-unauthenticated php8.1-php-xdebug
-  sed -i "s|##||g" /etc/php/8.1/fpm/php.ini
+  apt -y install --allow-unauthenticated php5.6-xdebug
+  sed -i "s|##||g" /etc/php/5.6/fpm/php.ini
 fi
-service php8.1-fpm reload
+service php5.6-fpm reload
 
 if [ -f /projeto/config_cntr/nginx.conf ] 
 then
