@@ -10,7 +10,6 @@ ENV PERMISSAO=true
 WORKDIR /code
 
 ADD start.sh /docker-entrypoint.d/40-start.sh
-ADD scripts_init/* /scripts_init/
 ADD scripts/* /scripts/
 
 RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
@@ -101,7 +100,6 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
     chmod 755 /docker-entrypoint.d/30-php-fpm.sh && \
     chmod 755 /docker-entrypoint.d/40-start.sh && \
     chmod 755 /docker-entrypoint.d/40-cron.sh && \
-    chmod 755 /scripts_init/* && \
     mkdir -p ~/.mutt/cache/headers && \
     mkdir /projeto && \
     mkdir ~/.mutt/cache/bodies && \

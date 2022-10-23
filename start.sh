@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if ! [ -d ${WWWROOT} ]
+then
+  mkdir -p ${WWWROOT}
+fi
+
 if ! [ -z ${GIT_USERNAME} ] && ! [ -z ${GIT_PASSWORD} ] && ! [ -z ${GIT_PATH} ]
 then
   cd /projeto
@@ -9,15 +14,18 @@ then
   git init && \
   git remote add master https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_PATH}
   git pull master master  
-  rsync -aruvhcpt --progress /projeto/* ${WORKDIR}/
+  rsync -aruvhcpt --progress /projeto/* ${WWWROOT}/
 fi
 
-if [ ${PERMISSAO} == "true" ]
+chown -R www-data:www-data ${WWWROOT} 
+chmod -R 755 ${WWWROOT} 
+
+if ! [ ${WWWROOT} == "/var/www/html" ]
 then
-  chown -R www-data:www-data ${WORKDIR} 
+  mkdir -p /var/www
+  ln -s ${WWWROOT} /var/www/html
 fi
 
-chmod -R 777 ${WORKDIR} 
 
 if [ -d /scripts_init ];
 then
@@ -26,25 +34,16 @@ then
   done
 fi
 
-chmod -R 755 /projeto/scripts_init
-
-if [ -d /projeto/scripts_init ];
-then
-  for f in /projeto/scripts_init/*;    
-    do echo $f; sh $f; 
-  done
-fi
-
 if [ -f /projeto/config_cntr/php.ini ] || [ -f /projeto/config_cntr/www.conf ]
 then
-  cp /projeto/config_cntr/php.ini /etc/php/8.0/fpm/php.ini
-  cp /projeto/config_cntr/www.conf /etc/php/8.0/fpm/pool.d/www.conf    
+  cp /projeto/config_cntr/php.ini /etc/php/8.1/fpm/php.ini
+  cp /projeto/config_cntr/www.conf /etc/php/8.1/fpm/pool.d/www.conf    
 fi
 
-if ! [ -z ${DEBUG} ]
+if ! [ -z ${DEBUG} ] && [ ${DEBUG}  == "true" ]
 then
   apt update
-  apt -y install --allow-unauthenticated php-xdebug
+  apt -y install --allow-unauthenticated php8.1-php-xdebug
   sed -i "s|##||g" /etc/php/8.1/fpm/php.ini
 fi
 service php8.1-fpm reload
@@ -59,8 +58,6 @@ if [ -d /projeto/config_cntr/conf.d ]
 then
   cp /projeto/config_cntr/conf.d/* /etc/nginx/conf.d/
 fi
-
-service nginx reload
 
 if ! [ -z ${MAIL_SERVER} ]
 then

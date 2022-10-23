@@ -34,7 +34,7 @@ Configurações para cliente de e-mail baseado em mutt
 ``/projeto/config_cntr/www.conf`` - Quando presente no projeto substitui o arquivo no SO e reinicia o serviço do PHP; \
 ``/projeto/config_cntr/nginx.conf`` - Quando presente no projeto substitui o arquivo no SO e reinicia o serviço do NGINX; \
 ``/projeto/config_cntr/default.conf`` - Quando presente no projeto substitui o arquivo no SO e reinicia o serviço do NGINX; \
-``/projeto/scripts_init`` - Todas as scripts adicionados e este path serão executadas na inicialização do pod.
+``/docker-entrypoint.d`` - Todas as scripts adicionados e este path serão executadas na inicialização do pod.
 
 
 ## Drivers
