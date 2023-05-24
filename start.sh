@@ -5,18 +5,6 @@ then
   mkdir -p ${WWWROOT}
 fi
 
-if ! [ -z ${GIT_USERNAME} ] && ! [ -z ${GIT_PASSWORD} ] && ! [ -z ${GIT_PATH} ]
-then
-  cd /projeto
-  git config --global pull.ff only && \
-  git config --global init.defaultBranch master && \
-  git config --global core.fileMode false && \
-  git init && \
-  git remote add master https://${GIT_USERNAME}:${GIT_PASSWORD}@${GIT_PATH}
-  git pull master master  
-  rsync -aruvhcpt --progress /projeto/* ${WWWROOT}/
-fi
-
 chown -R www-data:www-data ${WWWROOT} 
 chmod -R 755 ${WWWROOT} 
 
@@ -32,11 +20,11 @@ then
   cp /projeto/config_cntr/www.conf /etc/php/8.1/fpm/pool.d/www.conf    
 fi
 
-if [ ${DEBUG}  == "true" ]
+if ! [ -z ${DEBUG} ]
 then
   apt update
   apt -y install --allow-unauthenticated php8.1-xdebug
-  sed -i "s|##||g" /etc/php/8.1/fpm/php.ini
+  printf  "zend_extension = /usr/lib/php/20210902/php_xdebug.so\nxdebug.mode=develop, trace, debug\nxdebug.client_port=9000" >> /etc/php/8.1/fpm/php.ini
 fi
 service php8.1-fpm reload
 
