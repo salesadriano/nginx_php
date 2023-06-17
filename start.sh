@@ -23,10 +23,10 @@ fi
 if ! [ -z ${DEBUG} ]
 then
   apt update
-  apt -y install --allow-unauthenticated php8.1-xdebug
-  printf  "zend_extension = /usr/lib/php/20210902/php_xdebug.so\nxdebug.mode=develop, trace, debug\nxdebug.client_port=9000" >> /etc/php/8.1/fpm/php.ini
+  apt -y install --allow-unauthenticated php8.2-xdebug 
+  printf "xdebug.mode = debug \nxdebug.start_with_request = yes \nxdebug.client_host = host.docker.internal" >> /etc/php/8.2/cli/php.ini  
 fi
-service php8.1-fpm reload
+service php8.2-fpm reload
 
 if [ -f /projeto/config_cntr/nginx.conf ] 
 then

@@ -8,6 +8,7 @@ WORKDIR /code
 
 ADD start.sh /docker-entrypoint.d/40-start.sh
 ADD scripts/* /scripts/
+ADD config_cntr/php.ini /tmpconfig/php.ini
 
 RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
     dpkg-reconfigure --frontend noninteractive tzdata && \
@@ -25,25 +26,25 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
     wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add - && \
     add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/ && \
     apt -y update && \
-    apt -y install --allow-unauthenticated php8.1 php8.1-fpm php8.1-mysql php8.1-mbstring php8.1-xmlrpc \
-                   php8.1-soap php8.1-gd php8.1-xml php8.1-intl php8.1-dev php8.1-curl php8.1-cli php8.1-zip \
-                   php8.1-imagick php8.1-pgsql php8.1-gmp php8.1-ldap php8.1-bcmath php8.1-bz2 php8.1-ctype \
-                   php8.1-opcache php8.1-phar php8.1-readline unixodbc-dev msodbcsql18 mssql-tools autoconf \
-                   libc-dev pkg-config adoptopenjdk-8-hotspot && \
+    apt -y install --allow-unauthenticated php8.2 php8.2-fpm php8.2-mysql php8.2-mbstring php8.2-xmlrpc \
+                   php8.2-soap php8.2-gd php8.2-xml php8.2-intl php8.2-dev php8.2-curl php8.2-cli php8.2-zip \
+                   php8.2-imagick php8.2-pgsql php8.2-gmp php8.2-ldap php8.2-bcmath php8.2-bz2 php8.2-ctype \
+                   php8.2-opcache php8.2-phar php8.2-readline unixodbc-dev msodbcsql18 mssql-tools autoconf \
+                   libc-dev pkg-config adoptopenjdk-8-hotspot fontforge cabextract && \
+    wget https://gist.githubusercontent.com/maxwelleite/10774746/raw/ttf-vista-fonts-installer.sh -q -O - | bash && \
     apt upgrade -y && \
     apt-get remove --purge --auto-remove -y  && \
     apt autoremove -y && \
     apt clean && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/8.1/mods-available/sqlsrv.ini && \
-    printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/8.1/mods-available/pdo_sqlsrv.ini && \
-    phpenmod -v 8.1 sqlsrv pdo_sqlsrv && \
-    ntpd -q -g && \
+    printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/8.2/mods-available/sqlsrv.ini && \
+    printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/8.2/mods-available/pdo_sqlsrv.ini && \
+    phpenmod -v  sqlsrv pdo_sqlsrv && \
     rm -rf /var/lib/apt/lists/* && \
     chown -R www-data:www-data /code &&  \
     printf "# priority=10\nservice ntp start\n" > /docker-entrypoint.d/10-ntpd.sh && \
     chmod 755 /docker-entrypoint.d/10-ntpd.sh && \
-    printf "# priority=30\nservice php8.1-fpm start\n" > /docker-entrypoint.d/30-php-fpm.sh && \
+    printf "# priority=30\nservice php-fpm start\n" > /docker-entrypoint.d/30-php-fpm.sh && \
     chmod 755 /docker-entrypoint.d/30-php-fpm.sh && \
     chmod 755 /docker-entrypoint.d/10-ntpd.sh && \    
     chmod 755 /docker-entrypoint.d/30-php-fpm.sh && \
@@ -56,10 +57,11 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
     mkdir ~/Mail && \
     mkdir -m 0700 ~/Mail/INBOX && \
     mkdir -m 0700 ~/Mail/INBOX/{cur,new,tmp}
-    
-ADD config_cntr/php.ini /etc/php/8.1/fpm/php.ini
-ADD config_cntr/www.conf /etc/php/8.1/fpm/pool.d/www.conf
+
+ADD config_cntr/www.conf /etc/php/8.2/fpm/pool.d/www.conf
+ADD config_cntr/php.ini /etc/php/8.2/fpm/php.ini
+ADD config_cntr/php.ini /etc/php/8.2/cli/php.ini
+ADD config_cntr/drivers/* /usr/lib/php/20220829/
 ADD config_cntr/nginx.conf /etc/nginx
 ADD config_cntr/default.conf /etc/nginx/conf.d/
 ADD config_cntr/muttrc.template /
-ADD config_cntr/drivers/* /usr/lib/php/20210902/
