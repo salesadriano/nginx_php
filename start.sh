@@ -16,8 +16,8 @@ fi
 
 if [ -f /projeto/config_cntr/php.ini ] || [ -f /projeto/config_cntr/www.conf ]
 then
-  cp /projeto/config_cntr/php.ini /etc/php/8.1/fpm/php.ini
-  cp /projeto/config_cntr/www.conf /etc/php/8.1/fpm/pool.d/www.conf    
+  cp /projeto/config_cntr/php.ini /etc/php/8.2/fpm/php.ini
+  cp /projeto/config_cntr/www.conf /etc/php/8.2/fpm/pool.d/www.conf    
 fi
 
 if ! [ -z ${DEBUG} ]
