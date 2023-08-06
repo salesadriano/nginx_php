@@ -43,11 +43,7 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
     # phpenmod -v  sqlsrv pdo_sqlsrv && \
     rm -rf /var/lib/apt/lists/* && \
     chown -R www-data:www-data /code &&  \
-    printf "# priority=10\nservice ntp start\n" > /docker-entrypoint.d/10-ntpd.sh && \
-    chmod 755 /docker-entrypoint.d/10-ntpd.sh && \
     printf "# priority=30\nservice php8.2-fpm start\n" > /docker-entrypoint.d/30-php-fpm.sh && \
-    chmod 755 /docker-entrypoint.d/30-php-fpm.sh && \
-    chmod 755 /docker-entrypoint.d/10-ntpd.sh && \    
     chmod 755 /docker-entrypoint.d/30-php-fpm.sh && \
     chmod 755 /docker-entrypoint.d/40-start.sh && \
     mkdir -p ~/.mutt/cache/headers && \
@@ -57,7 +53,8 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
     touch ~/.mutt/muttrc && \
     mkdir ~/Mail && \
     mkdir -m 0700 ~/Mail/INBOX && \
-    mkdir -m 0700 ~/Mail/INBOX/{cur,new,tmp}
+    mkdir -m 0700 ~/Mail/INBOX/{cur,new,tmp} && \
+    git config --global core.fileMode false
 
 ADD config_cntr/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 ADD config_cntr/php.ini /etc/php/8.2/fpm/php.ini
