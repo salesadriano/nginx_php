@@ -1,3 +1,4 @@
+set mbox_type=Maildir
 set from = "${MAIL_USER}@${MAIL_DOMAIN}"
 set realname = "${MAIL_NAME}"
 set ssl_force_tls = yes
@@ -6,7 +7,7 @@ set spoolfile = "+INBOX"
 set header_cache =~/.mutt/cache/headers
 set message_cachedir =~/.mutt/cache/bodies
 set certificate_file =~/.mutt/certificates
-set smtp_url = "smtp://${MAIL_USER}@${MAIL_SERVER}:${MAIL_SMTP_PORT}/"
+set smtp_url = "smtp://${MAIL_USER}@smtp.gmail.com:587/"
 set smtp_pass = "${MAIL_PASSWORD}"
 set move = no
 set imap_keepalive = 900

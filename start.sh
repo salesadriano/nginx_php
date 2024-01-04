@@ -24,7 +24,7 @@ if ! [ -z ${DEBUG} ]
 then
   apt update
   apt -y install --allow-unauthenticated php8.2-xdebug 
-  printf "xdebug.mode = debug \nxdebug.start_with_request = yes \nxdebug.client_host = host.docker.internal" >> /etc/php/8.2/cli/php.ini  
+  printf "xdebug.mode = develop,debug,coverage \nxdebug.start_with_request = yes \nxdebug.client_host = host.docker.internal" >> /etc/php/8.2/cli/php.ini  
 fi
 service php8.2-fpm reload
 
