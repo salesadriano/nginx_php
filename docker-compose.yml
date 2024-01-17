@@ -1,0 +1,18 @@
+version: "3.5"
+services:
+  web:
+    build: .
+    command: echo OK
+    environment:
+      WWWROOT: /code/public
+      DEBUG: true
+    volumes:
+      - web:/code
+    container_name: nginx_php
+    ports:
+      - 80:80
+
+volumes:
+  data: {}
+  web: {}
+

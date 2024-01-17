@@ -1,5 +1,4 @@
 #!/bin/bash
-
 if ! [ -d ${WWWROOT} ]
 then
   mkdir -p ${WWWROOT}
@@ -14,33 +13,45 @@ then
   ln -s ${WWWROOT} /var/www/html
 fi
 
-if [ -f /projeto/config_cntr/php.ini ] || [ -f /projeto/config_cntr/www.conf ]
+if [ -f /projeto/config_cntr/php.ini ] 
 then
-  cp /projeto/config_cntr/php.ini /etc/php/8.2/fpm/php.ini
-  cp /projeto/config_cntr/www.conf /etc/php/8.2/fpm/pool.d/www.conf    
+  cp /projeto/config_cntr/php.ini /config/
+fi
+if [ -f /projeto/config_cntr/www.conf ] 
+then  
+  cp /projeto/config_cntr/www.conf /config/    
+fi
+if [ -f /projeto/config_cntr/nginx.conf ] 
+then
+  cp /projeto/config_cntr/nginx.conf /config/  
+fi
+if [ -f /projeto/config_cntr/default.conf ] 
+then
+  cp /projeto/config_cntr/default.conf /config/  
 fi
 
-if ! [ -z ${DEBUG} ]
+export COMMENT="#"
+
+if [ ${DEBUG} == true ]
 then
   apt update
   apt -y install --allow-unauthenticated php8.2-xdebug 
-  printf "xdebug.mode = develop,debug,coverage \nxdebug.start_with_request = yes \nxdebug.client_host = host.docker.internal" >> /etc/php/8.2/cli/php.ini  
+  export COMMENT=""
 fi
-service php8.2-fpm reload
 
-if [ -f /projeto/config_cntr/nginx.conf ] 
+if [ ${GIT_EMAIL} != "" ]  &&  [ ${GIT_USERNAME} != "" ] 
 then
-  cp /projeto/config_cntr/nginx.conf /etc/nginx/nginx.conf  
-fi
-sed -i "s|/code;|${WWWROOT};|g" /etc/nginx/conf.d/default.conf
-
-if [ -d /projeto/config_cntr/conf.d ]
-then
-  cp /projeto/config_cntr/conf.d/* /etc/nginx/conf.d/
+  git config --global user.email ${GIT_EMAIL} 
+  git config --global user.name ${GIT_USERNAME}
 fi
 
 if ! [ -z ${MAIL_SERVER} ]
 then
   envsubst < /muttrc.template > ~/.mutt/muttrc
 fi
-
+envsubst < /config/www.conf  > /etc/php/8.2/fpm/pool.d/www.conf
+envsubst < /config/php.ini  > /etc/php/8.2/fpm/php.ini
+envsubst < /config/php.ini  > /etc/php/8.2/cli/php.ini
+cp /config/nginx.conf /etc/nginx/nginx.conf
+envsubst < /config/default.conf  > /etc/nginx/conf.d/000-default.conf
+service php8.2-fpm reload
