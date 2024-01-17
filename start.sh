@@ -39,7 +39,7 @@ then
   export COMMENT=""
 fi
 
-if [ ${GIT_EMAIL} != "" ]  &&  [ ${GIT_USERNAME} != "" ] 
+if ! [ -z ${GIT_EMAIL} ]  && ! [ -z ${GIT_USERNAME} ] 
 then
   git config --global user.email ${GIT_EMAIL} 
   git config --global user.name ${GIT_USERNAME}
@@ -47,7 +47,7 @@ fi
 
 if ! [ -z ${MAIL_SERVER} ]
 then
-  envsubst < /muttrc.template > ~/.mutt/muttrc
+  envsubst < /config/muttrc.template > ~/.mutt/muttrc
 fi
 envsubst < /config/www.conf  > /etc/php/8.2/fpm/pool.d/www.conf
 envsubst < /config/php.ini  > /etc/php/8.2/fpm/php.ini

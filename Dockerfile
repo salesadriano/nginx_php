@@ -22,6 +22,7 @@ ENV GIT_USERNAME=""
 WORKDIR /code
 
 ADD start.sh /docker-entrypoint.d/40-start.sh
+ADD config_cntr/* /config
 
 #TODO Compilar com php 8.3
 RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
@@ -67,7 +68,7 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
     mkdir ~/Mail && \
     mkdir -m 0700 ~/Mail/INBOX && \
     mkdir -m 0700 ~/Mail/INBOX/{cur,new,tmp} && \
-    git config --global core.fileMode false
+    git config --global core.fileMode false  && \
+    git config --global core.autocrlf true
 
-ADD config_cntr/* /config
-ADD config_cntr/muttrc.template /
+

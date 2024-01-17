@@ -6,12 +6,13 @@ services:
     environment:
       WWWROOT: /code/public
       DEBUG: true
+      GIT_EMAIL: fdgfd@jhkhkjh
+      GIT_USERNAME: jhkjhj_kjhjkh_kjkj
     volumes:
       - web:/code
     container_name: nginx_php
     ports:
       - 80:80
-
 volumes:
   data: {}
   web: {}
