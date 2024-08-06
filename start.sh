@@ -35,7 +35,7 @@ export COMMENT="#"
 if [ ${DEBUG} == true ]
 then
   apt update
-  apt -y install --allow-unauthenticated php8.2-xdebug 
+  apt -y install --allow-unauthenticated php8.3-xdebug 
   export COMMENT=""
 fi
 
@@ -49,9 +49,23 @@ if ! [ -z ${MAIL_SERVER} ]
 then
   envsubst < /config/muttrc.template > ~/.mutt/muttrc
 fi
-envsubst < /config/www.conf  > /etc/php/8.2/fpm/pool.d/www.conf
-envsubst < /config/php.ini  > /etc/php/8.2/fpm/php.ini
-envsubst < /config/php.ini  > /etc/php/8.2/cli/php.ini
+envsubst < /config/www.conf  > /etc/php/8.3/fpm/pool.d/www.conf
+envsubst < /config/php.ini  > /etc/php/8.3/fpm/php.ini
+envsubst < /config/php.ini  > /etc/php/8.3/cli/php.ini
 cp /config/nginx.conf /etc/nginx/nginx.conf
 envsubst < /config/default.conf  > /etc/nginx/conf.d/000-default.conf
-service php8.2-fpm reload
+
+if pgrep -x "php8.3-fpm" >/dev/null
+then
+    service php8.3-fpm reload
+else
+    service php8.3-fpm start
+fi
+
+if pgrep -x "nginx" >/dev/null
+then
+    service nginx reload
+else
+    service nginx start
+fi
+

@@ -1,4 +1,4 @@
-FROM nginx:1.25.3
+FROM nginx:1.27.0
 
 ENV WWWROOT=/var/www/html
 ENV WORKDIR=/code
@@ -22,9 +22,8 @@ ENV GIT_USERNAME=""
 WORKDIR /code
 
 ADD start.sh /docker-entrypoint.d/40-start.sh
-ADD config_cntr/* /config
+ADD config_cntr/* /config/
 
-#TODO Compilar com php 8.3
 RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
     dpkg-reconfigure --frontend noninteractive tzdata && \
     apt update && \
@@ -43,10 +42,10 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
     echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list && \
     mv wtf-bookworm.sources /etc/apt/sources.list.d/ && \
     apt -y update && \
-    apt -y install --allow-unauthenticated php8.2 php8.2-fpm php8.2-mysql php8.2-mbstring php8.2-xmlrpc \
-                   php8.2-soap php8.2-gd php8.2-xml php8.2-intl php8.2-dev php8.2-curl php8.2-cli php8.2-zip \
-                   php8.2-imagick php8.2-pgsql php8.2-gmp php8.2-ldap php8.2-bcmath php8.2-bz2 php8.2-ctype \
-                   php8.2-opcache php8.2-phar php8.2-readline unixodbc-dev autoconf temurin-8-jdk\
+    apt -y install --allow-unauthenticated php8.3 php8.3-fpm php8.3-mysql php8.3-mbstring php8.3-xmlrpc \
+                   php8.3-soap php8.3-gd php8.3-xml php8.3-intl php8.3-dev php8.3-curl php8.3-cli php8.3-zip \
+                   php8.3-imagick php8.3-pgsql php8.3-gmp php8.3-ldap php8.3-bcmath php8.3-bz2 php8.3-ctype \
+                   php8.3-opcache php8.3-phar php8.3-readline unixodbc-dev autoconf temurin-8-jdk\
                    libc-dev pkg-config fontforge cabextract && \
     wget https://gist.githubusercontent.com/maxwelleite/10774746/raw/ttf-vista-fonts-installer.sh -q -O - | bash && \
     apt upgrade -y && \
@@ -56,12 +55,11 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     rm -rf /var/lib/apt/lists/* && \
     chown -R www-data:www-data /code &&  \
-    printf "# priority=30\nservice php8.2-fpm start\n" > /docker-entrypoint.d/30-php-fpm.sh && \
+    printf "# priority=30\nservice php8.3-fpm start\n" > /docker-entrypoint.d/30-php-fpm.sh && \
     chmod 755 /docker-entrypoint.d/30-php-fpm.sh && \
     chmod 755 /docker-entrypoint.d/40-start.sh && \
     mkdir -p ~/.mutt/cache/headers && \
     mkdir /projeto && \
-    mkdir /config && \
     mkdir ~/.mutt/cache/bodies && \
     touch ~/.mutt/certificates && \
     touch ~/.mutt/muttrc && \
@@ -70,5 +68,3 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
     mkdir -m 0700 ~/Mail/INBOX/{cur,new,tmp} && \
     git config --global core.fileMode false  && \
     git config --global core.autocrlf true
-
-
