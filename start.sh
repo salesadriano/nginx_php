@@ -4,14 +4,15 @@ then
   mkdir -p ${WWWROOT}
 fi
 
-chown -R www-data:www-data ${WWWROOT} 
-chmod -R 755 ${WWWROOT} 
 
 if ! [ ${WWWROOT} == "/var/www/html" ]
 then
   mkdir -p /var/www
   ln -s ${WWWROOT} /var/www/html
 fi
+
+chown -R www-data:www-data ${WWWROOT} 
+chmod -R 777 ${WWWROOT} 
 
 if [ -f /projeto/config_cntr/php.ini ] 
 then
