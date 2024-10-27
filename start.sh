@@ -50,23 +50,12 @@ if ! [ -z ${MAIL_SERVER} ]
 then
   envsubst < /config/muttrc.template > ~/.mutt/muttrc
 fi
-envsubst < /config/www.conf  > /etc/php/8.3/fpm/pool.d/www.conf
-envsubst < /config/php.ini  > /etc/php/8.3/fpm/php.ini
-envsubst < /config/php.ini  > /etc/php/8.3/cli/php.ini
+envsubst < /config/www.conf  > /etc/php/8.4/fpm/pool.d/www.conf
+envsubst < /config/php.ini  > /etc/php/8.4/fpm/php.ini
+envsubst < /config/php.ini  > /etc/php/8.4/cli/php.ini
 cp /config/nginx.conf /etc/nginx/nginx.conf
 envsubst < /config/default.conf  > /etc/nginx/conf.d/000-default.conf
 
-if pgrep -x "php8.3-fpm" >/dev/null
-then
-    service php8.3-fpm reload
-else
-    service php8.3-fpm start
-fi
-
-if pgrep -x "nginx" >/dev/null
-then
-    service nginx reload
-else
-    service nginx start
-fi
+service php8.4-fpm start
+nginx -g 'daemon off;'
 

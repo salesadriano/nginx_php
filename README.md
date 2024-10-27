@@ -73,7 +73,6 @@ Ferramentas disponíveis na Image
 - Git
 - SSH Client
 - Rsync
-- CRON Service
 - Unzip
 - NTP Service
 
