@@ -54,8 +54,9 @@ envsubst < /config/www.conf  > /etc/php/8.4/fpm/pool.d/www.conf
 envsubst < /config/php.ini  > /etc/php/8.4/fpm/php.ini
 envsubst < /config/php.ini  > /etc/php/8.4/cli/php.ini
 cp /config/nginx.conf /etc/nginx/nginx.conf
-envsubst < /config/default.conf  > /etc/nginx/conf.d/000-default.conf
+envsubst < /config/default.conf  > /etc/nginx/conf.d/default.conf
+# echo "\ndaemon off;" >> /etc/nginx/nginx.conf
 
 service php8.4-fpm start
-nginx -g 'daemon off;'
+service nginx start
 

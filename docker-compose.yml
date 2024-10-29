@@ -1,13 +1,12 @@
-version: "3.5"
 services:
   web:
-    build: .
-    command: echo OK
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    # command: echo OK
     environment:
-      WWWROOT: /code/public
+      WWWROOT: /code
       DEBUG: true
-      GIT_EMAIL: fdgfd@jhkhkjh
-      GIT_USERNAME: jhkjhj_kjhjkh_kjkj
     volumes:
       - web:/code
     container_name: nginx_php

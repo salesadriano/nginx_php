@@ -1,7 +1,6 @@
-FROM nginx:1.27.0
+FROM nginx:1.27.2
 
 ENV WWWROOT=/var/www/html
-ENV WORKDIR=/code
 ENV PHP_EXEC_TIMEOUT=3600
 ENV PHP_MEMORY=8192
 ENV PHP_POST_MAX=8192
@@ -45,15 +44,13 @@ RUN ln -fs /usr/share/zoneinfo/America/Rio_Branco /etc/localtime && \
     apt -y install --allow-unauthenticated php8.4 php8.4-fpm php8.4-mysql php8.4-mbstring php-xmlrpc \
                    php8.4-soap php8.4-gd php8.4-xml php8.4-intl php8.4-dev php8.4-curl php8.4-cli php8.4-zip \
                    php-imagick php8.4-pgsql php8.4-gmp php8.4-ldap php8.4-bcmath php8.4-bz2 php8.4-ctype \
-                   php8.4-opcache php8.4-phar php8.4-readline unixodbc-dev autoconf \  
-                #    temurin-8-jdk\
+                   php8.4-opcache php8.4-phar php8.4-readline unixodbc-dev autoconf \ 
                    libc-dev pkg-config fontforge cabextract && \
     update-alternatives --set php /usr/bin/php8.4 && \
     update-alternatives --set phar /usr/bin/phar8.4 && \
     update-alternatives --set phar.phar /usr/bin/phar.phar8.4 && \
     update-alternatives --set phpize /usr/bin/phpize8.4 && \
     update-alternatives --set php-config /usr/bin/php-config8.4 && \
-   #  update-alternatives --set phpdbg /usr/bin/phpdbg8.4 && \
     wget https://gist.githubusercontent.com/maxwelleite/10774746/raw/ttf-vista-fonts-installer.sh -q -O - | bash && \
     apt upgrade -y && \
     apt-get remove --purge --auto-remove -y  && \
