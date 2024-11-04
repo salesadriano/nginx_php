@@ -4,7 +4,6 @@ then
   mkdir -p ${WWWROOT}
 fi
 
-
 if ! [ ${WWWROOT} == "/var/www/html" ]
 then
   mkdir -p /var/www
@@ -50,13 +49,12 @@ if ! [ -z ${MAIL_SERVER} ]
 then
   envsubst < /config/muttrc.template > ~/.mutt/muttrc
 fi
-envsubst < /config/www.conf  > /etc/php/8.4/fpm/pool.d/www.conf
-envsubst < /config/php.ini  > /etc/php/8.4/fpm/php.ini
-envsubst < /config/php.ini  > /etc/php/8.4/cli/php.ini
+
+envsubst < /config/www.conf  > /etc/php/8.3/fpm/pool.d/www.conf
+envsubst < /config/php.ini  > /etc/php/8.3/fpm/php.ini
+envsubst < /config/php.ini  > /etc/php/8.3/cli/php.ini
 cp /config/nginx.conf /etc/nginx/nginx.conf
 envsubst < /config/default.conf  > /etc/nginx/conf.d/default.conf
-# echo "\ndaemon off;" >> /etc/nginx/nginx.conf
 
-service php8.4-fpm start
+service php8.3-fpm start
 service nginx start
-

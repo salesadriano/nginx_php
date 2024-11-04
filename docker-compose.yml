@@ -9,6 +9,7 @@ services:
       DEBUG: true
     volumes:
       - web:/code
+      - ./index.php:/code/index.php
     container_name: nginx_php
     ports:
       - 80:80
